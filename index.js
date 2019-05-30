@@ -41,7 +41,6 @@ app.post('/login',Controller.Login);
 app.post('/register',Controller.Register);
 app.get('/logout',Controller.Logout);
 app.get('/Vocabulary',Controller.Vocabulary);
-app.post('/Vocabulary',Controller.PostVocabulary);
 app.get('/profile',Controller.MyProfile);
 app.get('/firstTest',Controller.firstTest);
 app.post('/firstTest',Controller.postfirstTest);
