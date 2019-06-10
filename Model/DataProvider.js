@@ -87,6 +87,40 @@ class DataProvider{
         if (score >= 4) obj['vocabularyLevel'] = parseInt(level)+1;
         dbo.collection("user").updateOne(query,newVal);
     }
+
+    async getQuestionsListening(levelFT,level){
+        var query = {
+            levelFT: levelFT,
+            level : level.toString()
+        };
+        var rs = await dbo.collection('Listening').find(query).toArray();
+        return rs;
+    }
+
+    async getListeningTest(levelFT,level){
+        var query = {
+            levelFT: levelFT,
+            level : level.toString()
+        };
+        var rs = await dbo.collection('ListeningTest').find(query).toArray();
+        return rs;
+    }
+
+    async getAnswerListeningTest(levelFT,level){
+        var query = {LevelFT: levelFT , Level : level};
+        var rs = await dbo.collection('answer_Listening').find(query).toArray();
+        return rs;
+    }
+
+    updateScoreListening(email,level,score){
+        var query = {email: email};
+        var obj= {};
+        obj["scoreListening."+level] = score;
+        let newVal = {$set : obj};
+        if (score >= 4) obj['listeningLevel'] = parseInt(level)+1;
+        dbo.collection("user").updateOne(query,newVal);
+    }
+
 }
 
 module.exports = DataProvider;

@@ -746,3 +746,15 @@ input#send_message{
 	font-family: 'Montserrat', sans-serif;
 	font-size: 13px;
 }
+
+i.volume{
+    text-align: center;
+    display: block;
+    margin-top: 50px;
+}
+
+.behind h4{
+	text-align: center;
+    margin-top: 28px;
+    color: red;
+}

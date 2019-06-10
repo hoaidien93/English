@@ -47,7 +47,12 @@ app.post('/firstTest',Controller.postfirstTest);
 app.get('/PrepareTest/vocabulary',Controller.prepareTestVocabulary);
 app.get('/GoToTest/vocabulary',Controller.testVocabulary);
 app.post('/GoToTest/vocabulary',Controller.postTestVocabulary);
+
 app.get('/Listening',Controller.getListening);
+app.get('/Pre-Listening',Controller.prepareTestListening);
+app.get('/GoToTest/listening',Controller.testListening);
+app.post('/GoToTest/listening',Controller.postTestListening);
+
 app.post('/ajax/register',Controller.checkEmail);
 app.get('/chatbox.js',(req,res)=>{
    res.sendFile(path.join(__dirname + '/chatbox.js'));
