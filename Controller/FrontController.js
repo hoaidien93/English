@@ -54,11 +54,7 @@ class FrontController{
                     status: "Username or password is incorrect"
                 });
             }
-        })
-        .catch((err)=>{
-            console.log(err);
-        });
-              
+        })              
     }
 
 	checkEmail(req,res){
@@ -252,8 +248,16 @@ class FrontController{
         }
         //write score to db;
         dataProvider.updateScoreVocabulary(sess.email,level,score);
-        if (score >= 4) return res.send('You pass it');
-        else res.send('Sorry!');
+        var renderData = [];
+        //check don't have a first test
+        renderData['nameTest'] = result[0]['level']+" Vocabulary Test";
+        renderData['content1'] = "Your score: " + score;
+        renderData['content2'] = score >= 4? "You Pass it !" : "You fail it , Try again !";
+        renderData['name'] = sess.name;
+        return res.render('afterTest',{
+            name: sess.name,
+            renderData: renderData
+        });
     }
 
     async getListening(req,res){
