@@ -1,126 +1,72 @@
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://hoaidien:maiyeu0510@ds151453.mlab.com:51453/hd_mongo";
-var dbo;
+var User = require('./User');
+var user = new User();
+var Vocabulary = require('./Vocabulary');
+var vocabulary = new Vocabulary();
+var Listening = require('./Listening');
+var listening = new Listening();
+var FirstTest = require('./FirstTest');
+var firstTest = new FirstTest();
 
 class DataProvider{
-    constructor(){
-        //Ket noi dtb:
-        MongoClient.connect(url,{useNewUrlParser: true },(err,db)=> {
-            if (err) throw  err;
-            dbo = db.db("hd_mongo");
-        });
-    }
-
     async checkLogin(email,password){
-        var query = {email : email, password: password};
-        var rs = await dbo.collection("user").find(query).toArray();
-        console.log(rs);
-        return rs;
+        return await user.checkLogin(email,password);
     }
 
     async isExistEmail(email){
-        var query = {email: email};
-        var rs = await dbo.collection("user").find(query).toArray();
-        var status = rs.length !== 0 ? false : true;
-		return status;
+        return await user.isExistEmail(email);
     }
 
     createAccount(email,name,password){
-        let account = {email: email,name: name, password: password};
-        dbo.collection("user").insertOne(account, (err, result) => {
-            if (err) throw err;
-        });
-        return true;
+        return user.createAccount(email,name,password);
     }
 
     async findInfoUser(email){
-        var query = {email : email};
-        var rs = await dbo.collection("user").find(query).toArray();
-        return rs;
+        return user.findInfoUser(email);
     }
 
-    async getQuestions(table){
-        var rs = await dbo.collection(table).find({}).toArray();
-        return rs;
-    }
-
-    async getProfile(email){
-        let query = {email : email};
-        var rs = await dbo.collection('user').find(query).toArray();
-        return rs;
+    async getQuestionsVocabulary(LevelFT,Level){
+        return await vocabulary.getQuestionsVocabulary(LevelFT,Level);
     }
 
     async getFirstTest(){
-        var rs =  await dbo.collection("firstTest").find({}).toArray();
-        return rs;
+        return await firstTest.getFirstTest();
     }
 
     async getAnswerFirstTest(){
-        var rs = await dbo.collection("answerFirstTest").find({}).toArray();
-        return rs;
+        return await firstTest.getAnswerFirstTest();
     }
 
     updateScoreFirstTest(email,level,score){
-        let query = {email : email};
-        let newVal = {$set :{level : level, scoreFirstTest: score,listeningLevel: 1, vocabularyLevel: 1, grammarLevel:1}};
-        dbo.collection("user").updateOne(query,newVal);
-
+        return firstTest.updateScoreFirstTest(email,level,score);
     }
 
     async getVocabularyTest(levelFT,level){
-        var query = {levelFT: levelFT , level : level};
-        var rs = await dbo.collection('vocabularyTest').find(query).toArray();
-        return rs;
+       return await vocabulary.getVocabularyTest(levelFT,level);
     }
 
     async getAnswerVocabularyTest(levelFT,level){
-        var query = {LevelFT: levelFT , Level : level};
-        var rs = await dbo.collection('answer_Vocabulary').find(query).toArray();
-        return rs;
+        return await vocabulary.getAnswerVocabularyTest(levelFT,level);
     }
 
     updateScoreVocabulary(email,level,score){
-        var query = {email: email};
-        var obj= {};
-        obj["scoreVocabulary."+level] = score;
-        let newVal = {$set : obj};
-        if (score >= 4) obj['vocabularyLevel'] = parseInt(level)+1;
-        dbo.collection("user").updateOne(query,newVal);
+        return vocabulary.updateScoreVocabulary(email,level,score);
     }
 
     async getQuestionsListening(levelFT,level){
-        var query = {
-            levelFT: levelFT,
-            level : level.toString()
-        };
-        var rs = await dbo.collection('Listening').find(query).toArray();
-        return rs;
+        return await listening.getQuestionsListening(levelFT,level);
     }
 
     async getListeningTest(levelFT,level){
-        var query = {
-            levelFT: levelFT,
-            level : level.toString()
-        };
-        var rs = await dbo.collection('ListeningTest').find(query).toArray();
-        return rs;
+        return await listening.getListeningTest(levelFT,level);
     }
 
     async getAnswerListeningTest(levelFT,level){
-        var query = {LevelFT: levelFT , Level : level};
-        var rs = await dbo.collection('answer_Listening').find(query).toArray();
-        return rs;
+        return await listening.getAnswerListeningTest(levelFT,level);
     }
 
     updateScoreListening(email,level,score){
-        var query = {email: email};
-        var obj= {};
-        obj["scoreListening."+level] = score;
-        let newVal = {$set : obj};
-        if (score >= 4) obj['listeningLevel'] = parseInt(level)+1;
-        dbo.collection("user").updateOne(query,newVal);
+        return listening.updateScoreListening(email,level,score);
     }
-
 }
 
 module.exports = DataProvider;
