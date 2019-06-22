@@ -69,9 +69,9 @@ class FrontController{
             create = false;
         }
         //Connect MongoDB to check username !;
-        dataProvider.isExistEmail(email).then(function(res)
+        dataProvider.isExistEmail(email).then(function(result)
         {
-            if (!res) {
+            if (!result) {
                 renderData['status_email'] = "Email is existed!";
             }
             else {
